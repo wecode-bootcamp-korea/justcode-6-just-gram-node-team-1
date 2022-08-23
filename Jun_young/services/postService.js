@@ -10,7 +10,6 @@ const postList = async () => {
 
 const userPostList = async (id) => {
   const [post] = await postDao.userPostList(id);
-
   let postings = JSON.parse(post["postings"]);
   post["postings"] = postings;
 
