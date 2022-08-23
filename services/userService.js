@@ -1,46 +1,25 @@
-const userDao = require("../models/userDao");
-const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
+const userDao = require("../models/userDao")
+// service는 오로지 dao에만 의존
+const bcrypt = require('bcryptjs')
+const jwt = require('jsonwebtoken')
 
-// signUp
-const createUser = async (nickname, email, password, profile_image) => {
-  // 비밀번호 암호화
-  const salt = bcrypt.genSaltSync(13);
-  const hashedPw = bcrypt.hashSync(password, salt);
+const createUser = async (email, password) => {
+	console.log('service 1')
+  // email 중복 체크 기능
+	
+	// password 암호화
+  const salt = bcrypt.genSaltSync(12);
 
-  const result = await userDao.createUser(
-    nickname,
-    email,
-    hashedPw,
-    profile_image
-  );
-  return result;
-};
+  const hashedPw = bcrypt.hashSync(password, salt)
+  const user = await userDao.createUser(email, hashedPw)
+	return user
+}
 
-// logIn
-const logInUser = async (email, password) => {
-  try {
-    const [queryRes] = await userDao.logInUser(email);
-    const comparePw = bcrypt.compareSync(password, queryRes.password);
-    //DB에서 hashedPw 가져와서 비교
-
-    if (comparePw) {
-      //JWT 발행
-      const token = jwt.sign({ user_id: queryRes.id }, "secretKey", {
-        expiresIn: "1h",
-      });
-      return token;
-    } else if (!comparePw) {
-      // 비밀번호 불일치로 토큰 발행 실패
-      return 1;
-    }
-  } catch {
-    // email이 존재하지 않아 쿼리문 실행 실패
-    return 0;
-  }
-};
+const getUser = async (email) => {
+	const user = await userDao.getUser(email)
+	return user
+}
 
 module.exports = {
-  createUser,
-  logInUser,
-};
+	createUser
+}

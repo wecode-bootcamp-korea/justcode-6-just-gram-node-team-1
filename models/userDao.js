@@ -1,4 +1,4 @@
-const { DataSource } = require("typeorm");
+const { DataSource } = require('typeorm')
 
 const myDataSource = new DataSource({
   type: process.env.TYPEORM_CONNECTION,
@@ -6,38 +6,26 @@ const myDataSource = new DataSource({
   port: process.env.TYPEORM_PORT,
   username: process.env.TYPEORM_USERNAME,
   password: process.env.TYPEORM_PASSWORD,
-  database: process.env.TYPEORM_DATABASE,
-});
+  database: process.env.TYPEORM_DATABASE
+})
 
-myDataSource
-  .initialize()
-  .then(() => {
-    console.log("Data Source has been initialized!");
-  })
-  .catch(() => {
-    console.log("Data Source initialize failed..");
-  });
+myDataSource.initialize().then(() => {
+  console.log("Data Source has been initialized")
+}).catch(() => {
+  console.log("Database initiate fail")
+})
 
-// signUp
-const createUser = async (nickname, email, hashedPw, profile_image) => {
-  const result = await myDataSource.query(
-    `INSERT INTO users(nickname, email, password, profile_image) VALUES (?, ?, ?, ?)`,
-    [nickname, email, hashedPw, profile_image]
-  );
+const createUser = async (email, hashedPw) => {
+  console.log('model 1')
+  const user = await myDataSource.query(`
+      INSERT INTO users(username, password)
+      VALUES (?, ?)
+    `, [email, hashedPw]);
 
-  return result;
-};
-
-// logIn
-const logInUser = async (email) => {
-  const result = myDataSource.query(
-    `SELECT id, password FROM users u WHERE u.email = ?`,
-    [email]
-  );
-  return result;
-};
+  console.log( 'model 2')
+  return user
+}
 
 module.exports = {
-  createUser,
-  logInUser,
-};
+  createUser
+}

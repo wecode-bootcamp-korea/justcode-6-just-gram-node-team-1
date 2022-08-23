@@ -1,10 +1,13 @@
-const express = require("express");
+const express = require('express')
 const router = express.Router();
 
-const userRouter = require("./userRouter");
-const postRouter = require("./postRouter");
+const userRouter = require('./userRouter')
+const postingRouter = require('./postingRouter')
 
-router.use("/users", userRouter);
-router.use("/posts", postRouter);
+router.get('/ping', (req, res) => {
+  res.json({ message: '/ pong' })
+})
+router.use('/users', userRouter);
+// router.use('/postings', postingRouter);
 
-module.exports = router;
+module.exports = router
