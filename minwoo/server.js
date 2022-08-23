@@ -1,19 +1,20 @@
-const dotenv = require("dotenv"); // 환경변수
-dotenv.config();
-const http = require("http");
-const express = require("express");
-const app = express();
-const router = require("./routers");
+// const dotenv = require("dotenv"); // 환경변수
+// dotenv.config();
+require("dotenv").config();
 
-app.use(express.json());
-app.use(router);
+const { createApp } = require("./app");
 
-app.get("/", (req, res) => {
-  res.status(200).json({ message: "pong!!" }); // 핑퐁테스트
-});
+const startServer = () => {
+  const app = createApp();
+  const port = 8000;
 
-const server = http.createServer(app);
+  app.get("/", (req, res) => {
+    res.status(200).json({ message: "pong!!" }); // 핑퐁테스트
+  });
 
-app.listen(8000, () => {
-  console.log(`포트 8000에서 서버가 동작중입니다...`);
-});
+  app.listen(8000, () => {
+    console.log(`Listening on Port 8000`);
+  });
+};
+
+startServer();
