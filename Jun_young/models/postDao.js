@@ -65,8 +65,8 @@ const userPostList = async (id) => {
   `,
     [id]
   );
-
-  console.log(postingList);
+  // console.log(postingList[0]["postings"]);
+  // console.log(post);
   return postingList;
 };
 
